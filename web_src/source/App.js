@@ -92,6 +92,7 @@ enyo.kind({
 	create: function() {
 
 		this.inherited(arguments);
+		this.userTodoCompletionStatusFlagChanged();
 		this.userTodoStringChanged();
 		this.parentsThisChanged();
 		this.deleteActionItemObjectChanged();
@@ -99,6 +100,8 @@ enyo.kind({
 	userTodoCompletionStatusFlagChanged: function() {
 
 		this.userTodoCompletionStatus = this.userTodoCompletionStatusFlag;
+		this.$.userTodoString.addRemoveClass("task-now-complete", this.userTodoCompletionStatus);
+		this.$.userTodoCheckMark.addRemoveClass("checkmark-now-complete", this.userTodoCompletionStatus);
 		return true;
 	},
 	userTodoStringChanged: function() {
@@ -121,6 +124,7 @@ enyo.kind({
 		this.userTodoCompletionStatus = !this.userTodoCompletionStatus;		// toggle flag
 		this.$.userTodoString.addRemoveClass("task-now-complete", this.userTodoCompletionStatus);
 		this.$.userTodoCheckMark.addRemoveClass("checkmark-now-complete", this.userTodoCompletionStatus);
+		this.parentsThisVar.saveToLocalStorage();		
 		return true;
 	},
 	itemDelete: function(inSender, inEvent) {
@@ -226,12 +230,12 @@ enyo.kind({
 			//	===================================	
 		},
 		{
-			// Display Bottom "FittableRow" with "About" botton
+			// Display Bottom "FittableRow" with "Reset" and "About" buttons
 			kind: "FittableRows",
 			style: "height:32px;margin:20px;",
 			// style: "height:32px;margin:20px;text-align:center;",
 			components: [
-				{kind: "onyx.Button", style: "margin:auto;float:left;", content: "Reset", ontap: "resetTapped"},
+				{kind: "onyx.Button", style: "margin:auto;float:left;",  content: "Reset", ontap: "resetTapped"},
 				{kind: "onyx.Button", style: "margin:auto;float:right;", content: "About", ontap: "aboutTapped"}
 			]
 		},
@@ -266,16 +270,16 @@ enyo.kind({
 
 		if(typeof(Storage) !== "undefined")
 		{
-			console.log("create: localStorage == true");
+			// console.log("create: localStorage == true");
 			this.localStorageAvailable = true;
 			this.retrieveFromLocalStorage();
 		}
 		else
 		{
-			console.log("create: localStorage == false");
+			// console.log("create: localStorage == false");
 			this.localStorageAvailable = false;
 		}
-
+		// sample code for testing browser support of local storage
 		// if('localStorage' in window && window['localStorage'] !== null){
 		// var store = window.localStorage;
 	},
@@ -302,25 +306,28 @@ enyo.kind({
 				for ( var i=0; i<listOfControls.length; i++)
 				{
 
-					enyo.log("["+i+"] AA " + listOfControls[i]);
+					// enyo.log("["+i+"] AA " + listOfControls[i]);
+					// enyo.log("["+i+"] AA " + listOfControls[i].getControls() );
+					// enyo.log("["+i+"] AA " + listOfControls[i].getComponents() );
+					// enyo.log("["+i+"] AA " + listOfControls[i].getContent() );
+					// enyo.log("["+i+"] AA " + listOfControls[i].getName());
+					// enyo.log("["+i+"] AAA " + listOfControls[i].userTodoCompletionStatus);
 
 					var myComponents = listOfControls[i].getComponents();
+
 					// enyo.log("["+i+"] A " + myComponents );
 
-					var moreComponents = myComponents[2].getContent();
-					enyo.log("["+i+"] B " + moreComponents );
-
-
-					// right here:  got to determine objects "completion status flag" value
-
+					var actionItemString = myComponents[2].getContent();
+					// enyo.log("["+i+"] B " + actionItemString );
 
 					itemObject = {
-						"text": moreComponents
+						"text": 				actionItemString,
+						"completionStatusFlag": listOfControls[i].userTodoCompletionStatus
 					};
 
-					enyo.log("itemObject.text => " + itemObject.text  + " => " + itemObject["text"]);
+					// enyo.log("itemObject.text => " + itemObject.text  + " => " + itemObject["text"]);
+					// enyo.log("itemObject.completionStatusFlag => " + itemObject.completionStatusFlag  + " => " + itemObject["completionStatusFlag"]);
 					storageObject.arrayOfObjects.push( itemObject );
-					// storageObject.arrayOfObjects.push( moreComponents );
 				}
 			}
 
@@ -335,10 +342,11 @@ enyo.kind({
 		}
 
 		// enyo.byId(id, doc) - returns getElementById on document doc (or on document if not specified), or returns what was passed into it if there is no element by that name
-		// example: localStorage.setItem('favoriteflavor','vanilla');
 	},
 	retrieveFromLocalStorage: function()
 	{
+
+		// enyo.log("retrieveFromLocalStorage()");
 
 		var storageObject = {
 			"arrayOfObjects": []
@@ -357,7 +365,6 @@ enyo.kind({
 
 			retrievedString = localStorage.getItem(this.localStorageReference);
 			retrievedObject = JSON.parse( retrievedString );
-			// retrievedObject = eval( "(" + retrievedString + ")");
 
 			// console.log("retrieveFromLocalStorage: A = " + retrievedObject);
 			// console.log("retrieveFromLocalStorage: B = " + retrievedObject.arrayOfObjects);
@@ -366,15 +373,19 @@ enyo.kind({
 			this.nextItemInList = 0;
 			for (var i=0; i<retrievedObject.arrayOfObjects.length; i++)
 			{
+				/*
+				enyo.log("CreatingComponent: " + retrievedObject.arrayOfObjects[i].text + " : " 
+					+ retrievedObject.arrayOfObjects[i].completionStatusFlag);
+				*/
 
 				this.createComponent({
 
-					name: this.itemPrefix + this.nextItemInList,
-					kind: "oneActionItem",
-					container: this.$.listOfItems,
-					userTodoString: retrievedObject.arrayOfObjects[i].text,
+					name: 					this.itemPrefix + this.nextItemInList,
+					kind: 					"oneActionItem",
+					container: 				this.$.listOfItems,
+					userTodoString: 			  retrievedObject.arrayOfObjects[i].text,
 					userTodoCompletionStatusFlag: retrievedObject.arrayOfObjects[i].completionStatusFlag,
-					parentsThis: this,
+					parentsThis: 			this,
 					deleteActionItemObject: deleteActionItemFunctionObject
 				});
 				++this.nextItemInList;
@@ -389,34 +400,7 @@ enyo.kind({
 			console.log("retrieveFromLocalStorage: value = null");
 			// window.alert("retrieveFromLocalStorage: value = null");
 		}
-
-		// example: var taste = localStorage.getItem('favoriteflavor');
 	},
-	/*
-	// This method no longer used
-	clearLocalStorage: function()
-	{
-
-		var storageObject = {
-			"arrayOfObjects": []
-		};
-
-		storageObject.arrayOfObjects.push("first entry");
-
-		if (this.localStorageAvailable)
-		{
-			localStorage.setItem(this.localStorageReference, JSON.stringify(storageObject) );
-			// localStorage.removeItem(this.localStorageReference);
-			console.log("clearLocalStorage: Cleared");
-		}
-		else
-		{
-			console.log("clearLocalStorage: Not Available");
-		}
-
-		// example: localStorage.removeItem('favoriteflavor');
-	},
-	*/
 
 	// localStorage.setItem( 'car', JSON.stringify(car) );
 	// console.log( JSON.parse( localStorage.getItem( 'car' ) ) );
@@ -529,7 +513,6 @@ enyo.kind({
 			}
 		}
 		this.saveToLocalStorage();
-		// this.clearLocalStorage();
 		return true;
 	}
 
