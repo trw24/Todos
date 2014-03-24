@@ -1,0 +1,116 @@
+#!/bin/sh 
+
+
+# Set directory and project name
+TARGET="todos"
+CAPITALIZED_TARGET="Todos"
+
+
+# Test to make sure "cordova" is in path
+which cordova >/dev/null 2>/dev/null
+
+if [ "$?" -eq 0  ]
+then
+	echo "Cordova found in search path"
+else
+	echo "Error:  \"cordova\" not in search path"
+	exit 1
+fi
+
+# Test to see if directory already exists
+if [ -d ./${TARGET} ]
+then
+	echo ""
+	echo "Aborting:  Target directory \"${TARGET}\" already exists."
+	echo ""
+	exit 1
+else
+	echo "Target directory does not yet exist."
+fi
+
+
+# Announce Beginning of Build
+echo "Cordova Build Beginning..."
+
+
+# Create Cordova project
+cordova create ${TARGET} edu.sample.${TARGET} ${CAPITALIZED_TARGET}
+
+
+cd ${TARGET}
+cordova platform add android
+cordova platform add ios
+
+# Do preliminary build.  Check for any errors.
+cordova build >/dev/null 2>/dev/null
+if [ "$?" -eq 0 ]
+then
+	echo "Preliminary build successful"
+else
+	echo "Error: preliminary build not successful"
+	exit 1
+fi
+
+
+# Add the PlugIns
+echo "Now adding Plugins"
+echo "Note:  Some errors may appear"
+
+cordova plugin add org.apache.cordova.device
+cordova plugin add org.apache.cordova.dialogs
+cordova plugin add org.apache.cordova.console
+cordova plugin add org.apache.cordova.device-orientation
+cordova plugin add org.apache.cordova.splashscreen
+
+
+echo ""
+echo "The following PlugIns have been installed: "
+cordova plugin ls
+
+
+# Do final build.  Check for any errors.
+cordova build >/dev/null 2>/dev/null
+if [ "$?" -eq 0 ]
+then
+	echo "Final build successful"
+else
+	echo "Error: final build not successful"
+	exit 1
+fi
+
+# Set aside WWW for Reference
+mv www www_reference
+mkdir www
+cp www_reference/config.xml www
+
+
+
+#	Announce End of Script.
+echo "End of Script"
+echo ""
+
+
+
+#
+#
+#	Additional Items:
+#
+#	Copy over icons
+#	Make sure icons display
+#	Copy over splash screens
+#	Make sure splash screens work
+#	
+#	Make sure apps are locked in Portrait (sensorPortrait for Android)
+#	Make sure apps are locked in Portrait (set iPhone and iPad for IOS)
+#	Add special Code to handle QA Server (self certification)
+#
+#	Make sure app stays running when HOME button is pressed (Android)
+#
+#	Add sure Credentials for Urban Airship added
+#	Make sure icons appear for UA Push Notification
+#
+#
+
+
+
+

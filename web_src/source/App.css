@@ -1,0 +1,35 @@
+/*
+	Put anything you reference with "url()" in ../assets/
+	This way, you can minify your application, and just remove the "source" folder for production
+*/
+.nice-padding {
+	padding: 15px;
+}
+
+
+.overall-width {
+	width: 80%;
+	/* original app has width = 548px */
+}
+
+
+.task-format {
+	font-size: 24px;
+	font-style: italic;
+	opacity: 1.0;
+}
+
+
+.task-now-complete {
+	text-decoration: line-through;
+	opacity: 0.4;
+}
+
+
+.checkmark-now-complete {
+	opacity: 0.4;
+}
+
+
+
+
