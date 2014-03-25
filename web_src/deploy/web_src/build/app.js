@@ -4426,7 +4426,8 @@ style: "margin:auto;background:white;border-bottom: 1px dotted #ccc;",
 published: {
 userTodoString: "",
 parentsThis: "",
-deleteActionItemObject: {}
+deleteActionItemObject: {},
+userTodoCompletionStatusFlag: !1
 },
 handlers: {},
 components: [ {
@@ -4455,7 +4456,10 @@ userTodoCompletionStatus: !1,
 localDeleteActionItemVar: {},
 parentsThisVar: {},
 create: function() {
-this.inherited(arguments), this.userTodoStringChanged(), this.parentsThisChanged(), this.deleteActionItemObjectChanged();
+this.inherited(arguments), this.userTodoCompletionStatusFlagChanged(), this.userTodoStringChanged(), this.parentsThisChanged(), this.deleteActionItemObjectChanged();
+},
+userTodoCompletionStatusFlagChanged: function() {
+return this.userTodoCompletionStatus = this.userTodoCompletionStatusFlag, this.$.userTodoString.addRemoveClass("task-now-complete", this.userTodoCompletionStatus), this.$.userTodoCheckMark.addRemoveClass("checkmark-now-complete", this.userTodoCompletionStatus), !0;
 },
 userTodoStringChanged: function() {
 return this.$.userTodoString.setContent(this.userTodoString), !0;
@@ -4467,7 +4471,7 @@ deleteActionItemObjectChanged: function() {
 return this.localDeleteActionItemVar = this.deleteActionItemObject, !0;
 },
 itemComplete: function(e, t) {
-return this.userTodoCompletionStatus = !this.userTodoCompletionStatus, this.$.userTodoString.addRemoveClass("task-now-complete", this.userTodoCompletionStatus), this.$.userTodoCheckMark.addRemoveClass("checkmark-now-complete", this.userTodoCompletionStatus), !0;
+return this.userTodoCompletionStatus = !this.userTodoCompletionStatus, this.$.userTodoString.addRemoveClass("task-now-complete", this.userTodoCompletionStatus), this.$.userTodoCheckMark.addRemoveClass("checkmark-now-complete", this.userTodoCompletionStatus), this.parentsThisVar.saveToLocalStorage(), !0;
 },
 itemDelete: function(e, t) {
 return this.parentsThisVar.removeItemFromList(this.getName()), !0;
@@ -4527,10 +4531,15 @@ name: "listOfItems"
 } ]
 }, {
 kind: "FittableRows",
-style: "height:32px;margin:20px;text-align:center;",
+style: "height:32px;margin:20px;",
 components: [ {
 kind: "onyx.Button",
-style: "margin:auto;",
+style: "margin:auto;float:left;",
+content: "Reset",
+ontap: "resetTapped"
+}, {
+kind: "onyx.Button",
+style: "margin:auto;float:right;",
 content: "About",
 ontap: "aboutTapped"
 } ]
@@ -4550,35 +4559,80 @@ style: "font-size:18px;padding: 15px;line-height: 150%;background-color:#C9B4A5;
 } ]
 } ],
 nextItemInList: 0,
+itemPrefix: "actionItem_",
+localStorageAvailable: !0,
+localStorageReference: "thisUniqueAppName",
 create: function() {
-this.inherited(arguments);
+this.inherited(arguments), typeof Storage != "undefined" ? (this.localStorageAvailable = !0, this.retrieveFromLocalStorage()) : this.localStorageAvailable = !1;
+},
+saveToLocalStorage: function() {
+var e = {
+arrayOfObjects: []
+}, t = {
+text: "",
+completionStatusFlag: !1
+};
+if (this.localStorageAvailable) {
+if (this.$.listOfItems.controls.length > 0) {
+var n = this.$.listOfItems.getControls();
+for (var r = 0; r < n.length; r++) {
+var i = n[r].getComponents(), s = i[2].getContent();
+t = {
+text: s,
+completionStatusFlag: n[r].userTodoCompletionStatus
+}, e.arrayOfObjects.push(t);
+}
+}
+localStorage.setItem(this.localStorageReference, JSON.stringify(e));
+}
+},
+retrieveFromLocalStorage: function() {
+var e = {
+arrayOfObjects: []
+}, t = "", n = {}, r = {
+deleteThisActionItemReference: enyo.bind(this, this.deleteActionItem)
+};
+if (this.localStorageAvailable) {
+t = localStorage.getItem(this.localStorageReference), n = JSON.parse(t), this.nextItemInList = 0;
+for (var i = 0; i < n.arrayOfObjects.length; i++) this.createComponent({
+name: this.itemPrefix + this.nextItemInList,
+kind: "oneActionItem",
+container: this.$.listOfItems,
+userTodoString: n.arrayOfObjects[i].text,
+userTodoCompletionStatusFlag: n.arrayOfObjects[i].completionStatusFlag,
+parentsThis: this,
+deleteActionItemObject: r
+}), ++this.nextItemInList;
+this.$.listOfItems.render();
+} else console.log("retrieveFromLocalStorage: value = null");
 },
 addItemToList: function(e, t) {
 var n = {
 deleteThisActionItemReference: enyo.bind(this, this.deleteActionItem)
 };
 this.createComponent({
-name: "actionItem_" + this.nextItemInList,
+name: this.itemPrefix + this.nextItemInList,
 kind: "oneActionItem",
 container: this.$.listOfItems,
 userTodoString: this.$.userInput.getValue(),
+userTodoCompletionStatusFlag: !1,
 parentsThis: this,
 deleteActionItemObject: n
-}), ++this.nextItemInList, this.$.listOfItems.render(), this.$.userInput.setValue("");
+}), ++this.nextItemInList, this.$.listOfItems.render(), this.$.userInput.setValue(""), this.saveToLocalStorage();
 },
 removeItemFromList: function(e) {
 if (this.$.listOfItems.controls.length > 0) {
 var t = this.getComponents();
 for (var n = 0; n < t.length; n++) t[n].getName() == e && t[n].destroy();
 }
-return !0;
+return this.saveToLocalStorage(), !0;
 },
 deleteActionItem: function(e) {
 if (this.$.listOfItems.controls.length > 0) {
 var t = this.getComponents();
 for (var n = 0; n < t.length; n++) t[n].getName() == e && t[n].destroy();
 }
-return !0;
+return this.saveToLocalStorage(), !0;
 },
 aboutTapped: function(e, t) {
 var n = "";
@@ -4586,5 +4640,12 @@ n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is En
 },
 aboutHide: function(e, t) {
 this.$.aboutPopup.hide();
+},
+resetTapped: function(e, t) {
+if (this.$.listOfItems.controls.length > 0) {
+var n = this.getComponents(), r = this.itemPrefix.length;
+for (var i = 0; i < n.length; i++) n[i].getName().substring(0, r) == this.itemPrefix && n[i].destroy();
+}
+return this.saveToLocalStorage(), !0;
 }
 });
