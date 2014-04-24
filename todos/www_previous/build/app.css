@@ -1433,7 +1433,7 @@
 
 
 .overall-width {
-	width: 80%;
+	width: 70%;
 	/* original app has width = 548px */
 }
 
@@ -1454,6 +1454,29 @@
 .checkmark-now-complete {
 	opacity: 0.4;
 }
+
+
+.app-title {
+
+	opacity:0.2;
+	text-rendering: optimizeLegibility;
+	text-shadow: -1px -1px rgba(0, 0, 0, 0.2);
+	font-color:rgba(255, 255, 255, 0.3);font-weight:bold;
+	font-size:50px;
+	margin-top:20px;
+	margin-bottom:20px;
+}
+
+
+.popup-style {
+
+	font-size:20px;
+	padding: 15px;
+	line-height: 150%;
+	background-color:#C9B4A5;
+	text-align: center;
+}
+
 
 
 

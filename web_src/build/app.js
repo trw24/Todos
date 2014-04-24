@@ -4418,7 +4418,19 @@ this.setShowing(!1);
 
 // App.js
 
-enyo.kind({
+myApp = {}, enyo.kind({
+name: "CordovaListener",
+components: [ {
+kind: "Signals",
+ondeviceready: "deviceReadyHandler"
+} ],
+deviceReadyHandler: function() {
+myApp = new MyApp, myApp.renderInto(document.body);
+},
+create: function() {
+this.inherited(arguments);
+}
+}), enyo.kind({
 name: "oneActionItem",
 kind: "FittableRows",
 classes: "overall-width",
@@ -4486,19 +4498,42 @@ onMouseOut: function(e, t) {
 return this.$.userTodoDeleteMark.applyStyle("visibility", "hidden"), !0;
 }
 }), enyo.kind({
-name: "App",
+name: "MyApp",
 kind: "FittableRows",
 style: "background-image:url(assets/bg.png)",
 components: [ {
-kind: "enyo.Scroller",
-fit: !0,
-horizontal: "hidden",
-strategyKind: "TouchScrollStrategy",
-components: [ {
+kind: "Signals",
+onbackbutton: "backButtonHandler"
+}, {
+name: "titleFittableRow",
 kind: "FittableRows",
+style: "height:65px;margin:auto;width:90%;",
 components: [ {
-content: "todos",
-style: "opacity:0.2;text-rendering: optimizeLegibility;text-shadow: -1px -1px rgba(0, 0, 0, 0.2);font-color:rgba(255, 255, 255, 0.3);font-weight:bold;font-size:70px;text-align:center;margin-top:20px;margin-bottom:20px;"
+kind: "FittableColumns",
+style: "height:100%;",
+components: [ {
+content: "To Dos",
+classes: "app-title",
+style: "width:65%;height:inherit;background-color:inherit;text-align:left;"
+}, {
+kind: "onyx.MenuDecorator",
+style: "width:35%;",
+components: [ {
+content: "Options",
+style: "float:right; margin-top:20px;"
+}, {
+kind: "onyx.Menu",
+floating: !0,
+components: [ {
+content: "Reset",
+ontap: "resetTapped"
+}, {
+content: "About",
+ontap: "aboutTapped"
+} ]
+} ]
+} ]
+} ]
 }, {
 kind: "FittableRows",
 classes: "overall-width",
@@ -4525,24 +4560,20 @@ style: "font-style:italic;border:0px;margin:0px;height:inherit;background-color:
 } ]
 } ]
 }, {
+kind: "enyo.Scroller",
+fit: !0,
+horizontal: "hidden",
+strategyKind: "TouchScrollStrategy",
+components: [ {
+kind: "FittableRows",
+components: [ {
 tag: "div",
 name: "listOfItems"
 } ]
 } ]
 }, {
 kind: "FittableRows",
-style: "height:32px;margin:20px;",
-components: [ {
-kind: "onyx.Button",
-style: "margin:auto;float:left;",
-content: "Reset",
-ontap: "resetTapped"
-}, {
-kind: "onyx.Button",
-style: "margin:auto;float:right;",
-content: "About",
-ontap: "aboutTapped"
-} ]
+style: "height:10px;"
 }, {
 name: "aboutPopup",
 kind: "onyx.Popup",
@@ -4555,7 +4586,7 @@ components: [ {
 name: "popupContent",
 kind: "FittableRows",
 allowHtml: !0,
-style: "font-size:18px;padding: 15px;line-height: 150%;background-color:#C9B4A5;text-align: center;"
+classes: "popup-style"
 } ]
 } ],
 nextItemInList: 0,
@@ -4563,7 +4594,7 @@ itemPrefix: "actionItem_",
 localStorageAvailable: !0,
 localStorageReference: "thisUniqueAppName",
 create: function() {
-this.inherited(arguments), typeof Storage != "undefined" ? (this.localStorageAvailable = !0, this.retrieveFromLocalStorage()) : this.localStorageAvailable = !1;
+this.inherited(arguments), typeof window.localStorage == "undefined" || window.localStorage === null ? this.localStorageAvailable = !1 : (this.localStorageAvailable = !0, this.retrieveFromLocalStorage());
 },
 saveToLocalStorage: function() {
 var e = {
@@ -4583,7 +4614,7 @@ completionStatusFlag: n[r].userTodoCompletionStatus
 }, e.arrayOfObjects.push(t);
 }
 }
-localStorage.setItem(this.localStorageReference, JSON.stringify(e));
+window.localStorage.setItem(this.localStorageReference, JSON.stringify(e));
 }
 },
 retrieveFromLocalStorage: function() {
@@ -4593,7 +4624,7 @@ arrayOfObjects: []
 deleteThisActionItemReference: enyo.bind(this, this.deleteActionItem)
 };
 if (this.localStorageAvailable) {
-t = localStorage.getItem(this.localStorageReference), n = JSON.parse(t), this.nextItemInList = 0;
+t = window.localStorage.getItem(this.localStorageReference), n = JSON.parse(t), this.nextItemInList = 0;
 for (var i = 0; i < n.arrayOfObjects.length; i++) this.createComponent({
 name: this.itemPrefix + this.nextItemInList,
 kind: "oneActionItem",
@@ -4647,5 +4678,8 @@ var n = this.getComponents(), r = this.itemPrefix.length;
 for (var i = 0; i < n.length; i++) n[i].getName().substring(0, r) == this.itemPrefix && n[i].destroy();
 }
 return this.saveToLocalStorage(), !0;
+},
+backButtonHandler: function(e, t) {
+navigator.app.exitApp();
 }
 });

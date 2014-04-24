@@ -30,7 +30,6 @@ public class Todos extends CordovaActivity
         super.onCreate(savedInstanceState);
         super.init();
         // Set by <content src="index.html" /> in config.xml
-        super.setIntegerProperty("loadUrlTimeoutValue", 10000);   // added by Troy
         super.loadUrl(Config.getStartUrl());
         //super.loadUrl("file:///android_asset/www/index.html")
     }

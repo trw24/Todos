@@ -60,8 +60,10 @@ cordova plugin add org.apache.cordova.device
 cordova plugin add org.apache.cordova.dialogs
 cordova plugin add org.apache.cordova.console
 cordova plugin add org.apache.cordova.device-orientation
-cordova plugin add org.apache.cordova.splashscreen
-
+# cordova plugin add org.apache.cordova.splashscreen
+cordova plugin add org.apache.cordova.vibration
+cordova plugin add org.apache.cordova.file
+cordova plugin add org.apache.cordova.file-transfer
 
 echo ""
 echo "The following PlugIns have been installed: "
@@ -81,8 +83,8 @@ fi
 # Set aside WWW for Reference
 mv www www_reference
 mkdir www
-cp www_reference/config.xml www
-
+cp    www_reference/config.xml www
+cp -R www_reference/res www
 
 
 #	Announce End of Script.
@@ -97,17 +99,7 @@ echo ""
 #
 #	Copy over icons
 #	Make sure icons display
-#	Copy over splash screens
-#	Make sure splash screens work
 #	
-#	Make sure apps are locked in Portrait (sensorPortrait for Android)
-#	Make sure apps are locked in Portrait (set iPhone and iPad for IOS)
-#	Add special Code to handle QA Server (self certification)
-#
-#	Make sure app stays running when HOME button is pressed (Android)
-#
-#	Add sure Credentials for Urban Airship added
-#	Make sure icons appear for UA Push Notification
 #
 #
 

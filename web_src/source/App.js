@@ -1,7 +1,40 @@
 //
 //	Troy's scaled down version of TodoMVC
 //
-//	=========================================
+//	===========================================================
+//
+//	CordovaListener.js
+//
+
+myApp = {};
+
+enyo.kind({
+	name: "CordovaListener",
+	components: [
+	    {kind: "Signals", ondeviceready: "deviceReadyHandler"}
+	],
+	deviceReadyHandler: function() {
+
+		// navigator.notification.alert("Device is ready", null, "Cordova-Enyo", "OK");
+
+		myApp = new MyApp();
+		myApp.renderInto(document.body);
+
+	},
+	create: function() {
+
+		this.inherited(arguments);
+
+		// used when not expecting "deviceready" event
+		// when run in non-cordova environment, un-comment this line
+		this.deviceReadyHandler();		
+	}
+
+});
+
+//
+//
+//	===========================================================
 //
 //	Beginning of Object which gets created dynamically
 //
@@ -154,20 +187,112 @@ enyo.kind({
 
 });
 
+
 //
 //	End of Object which gets created dynamically
 //
-//	============================================
+//	===========================================================
+//
+//	===========================================================
 //
 //	Beginning of Main App
 //
 
+
 enyo.kind({
-	name: "App",
+	name: "MyApp",
 	kind: "FittableRows",
 	style: "background-image:url(assets/bg.png)",
 	components:
 	[
+	    {
+	    	kind: "Signals", 
+	    	onbackbutton: "backButtonHandler"
+	    },
+		
+		{
+			// New "revised" Title bar ++ Menu button
+			name: "titleFittableRow",
+			kind: "FittableRows",
+			// classes: "overall-width",
+			style: "height:65px;margin:auto;width:90%;",
+			components:
+			[{
+				kind: "FittableColumns",
+				style: "height:100%;",
+				components:
+				[
+					{
+						content: "To Dos",
+						classes: "app-title",
+						style: "width:65%;height:inherit;background-color:inherit;text-align:left;"
+					},
+
+
+					{
+						kind: "onyx.MenuDecorator",
+						// onSelect: "itemSelected",
+						style: "width:35%;",
+						components: 
+						[
+							{
+								content: "Options",
+								style: "float:right; margin-top:20px;"
+							},
+							{
+								kind: "onyx.Menu", 
+								floating: true, 
+								components: 
+								[
+
+									{content: "Reset", ontap: "resetTapped"},
+									{content: "About", ontap: "aboutTapped"}
+
+								]
+							}
+						]
+					}
+
+
+				]
+			}]
+		},
+
+		{
+			// Display Top Border
+			kind: "FittableRows",
+			classes: "overall-width",
+			style: "height:15px;margin:auto;background:-webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));"
+		},
+		{
+			// Input Box to Create New TodoItem
+			name: "createTodoItem",
+			kind: "FittableRows",
+			classes: "overall-width",
+			style: "height:65px;margin:auto;background:white;border-bottom:1px gray solid;",
+			components:
+			[{
+				kind: "FittableColumns",
+				style: "height:100%;",
+				components:
+				[
+					{
+						content: "",
+						style: "width:50px;height:inherit;background-color:inherit;text-align:center;"
+					},
+					{
+						kind: "onyx.Input",
+						name: "userInput",
+						placeholder: "Enter Task",
+						content: "",
+						fit: true,
+						onchange: "addItemToList",
+						style: "font-style:italic;border:0px;margin:0px;height:inherit;background-color:inherit;font-size:24px;padding:10px;"
+					}
+				]
+			}]
+		},
+
 		{
 			//	===================================	
 			kind: "enyo.Scroller",
@@ -180,45 +305,7 @@ enyo.kind({
 					kind: "FittableRows",
 					components:
 					[
-						{
-							// Display Main Title
-							content: "todos",
-							style: "opacity:0.2;text-rendering: optimizeLegibility;text-shadow: -1px -1px rgba(0, 0, 0, 0.2);font-color:rgba(255, 255, 255, 0.3);font-weight:bold;font-size:70px;text-align:center;margin-top:20px;margin-bottom:20px;"
-						},
-						{
-							// Display Top Border
-							kind: "FittableRows",
-							classes: "overall-width",
-							style: "height:15px;margin:auto;background:-webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));"
-						},
-						{
-							// Input Box to Create New TodoItem
-							name: "createTodoItem",
-							kind: "FittableRows",
-							classes: "overall-width",
-							style: "height:65px;margin:auto;background:white;border-bottom:1px gray solid;",
-							components:
-							[{
-								kind: "FittableColumns",
-								style: "height:100%;",
-								components:
-								[
-									{
-										content: "",
-										style: "width:50px;height:inherit;background-color:inherit;text-align:center;"
-									},
-									{
-										kind: "onyx.Input",
-										name: "userInput",
-										placeholder: "Enter Task",
-										content: "",
-										fit: true,
-										onchange: "addItemToList",
-										style: "font-style:italic;border:0px;margin:0px;height:inherit;background-color:inherit;font-size:24px;padding:10px;"
-									}
-								]
-							}]
-						},
+
 						{
 							// Anchor on which to hang the dynamically created items
 							tag: "div", 
@@ -230,15 +317,24 @@ enyo.kind({
 			//	===================================	
 		},
 		{
-			// Display Bottom "FittableRow" with "Reset" and "About" buttons
+			// Bottom "spacer" so not up-against button of view
 			kind: "FittableRows",
-			style: "height:32px;margin:20px;",
-			// style: "height:32px;margin:20px;text-align:center;",
-			components: [
-				{kind: "onyx.Button", style: "margin:auto;float:left;",  content: "Reset", ontap: "resetTapped"},
-				{kind: "onyx.Button", style: "margin:auto;float:right;", content: "About", ontap: "aboutTapped"}
-			]
+			style: "height:10px;"
 		},
+
+		//	=============================================
+		//	Now part of Menu button in upper right of app
+		// {
+		// 	// Display Bottom "FittableRow" with "Reset" and "About" buttons
+		// 	kind: "FittableRows",
+		// 	style: "height:32px;margin:20px;",
+		// 	// style: "height:32px;margin:20px;text-align:center;",
+		// 	components: [
+		// 		{kind: "onyx.Button", style: "margin:auto;float:left;",  content: "Reset", ontap: "resetTapped"},
+		// 		{kind: "onyx.Button", style: "margin:auto;float:right;", content: "About", ontap: "aboutTapped"}
+		// 	]
+		// },
+		//	=============================================
 		{
 			// Create the PopUp Object
 			name: "aboutPopup",
@@ -253,8 +349,7 @@ enyo.kind({
 				name: "popupContent",
 				kind: "FittableRows",
 	            allowHtml: true,
-                style: "font-size:18px;padding: 15px;line-height: 150%;background-color:#C9B4A5;text-align: center;"
-	            // style: "padding: 15px;line-height: 150%;background-color:#C9B4A5;text-align: center;"
+	            classes: "popup-style"
 			}]
 		}
 	],
@@ -268,20 +363,31 @@ enyo.kind({
 	{
 		this.inherited(arguments);
 
-		if(typeof(Storage) !== "undefined")
+
+		if ( typeof(window.localStorage) == 'undefined' || window.localStorage === null)
 		{
-			// console.log("create: localStorage == true");
-			this.localStorageAvailable = true;
-			this.retrieveFromLocalStorage();
+			// enyo.log("window.localStorage == FALSE");
+			// navigator.notification.alert("Local Storage = false", null, "", "OK");
+			this.localStorageAvailable = false;
 		}
 		else
 		{
-			// console.log("create: localStorage == false");
-			this.localStorageAvailable = false;
+			// enyo.log("window.localStorage == TRUE");
+			// navigator.notification.alert("Local Storage = true", null, "", "OK");
+			this.localStorageAvailable = true;
+
+			// Run this line when app does not load correctly
+			// It forces saved values to be cleared
+			//
+			// this.resetTapped();
+			//
+
+			this.retrieveFromLocalStorage();
 		}
+
+
 		// sample code for testing browser support of local storage
 		// if('localStorage' in window && window['localStorage'] !== null){
-		// var store = window.localStorage;
 	},
 	//	=========================================
 	saveToLocalStorage: function()
@@ -337,7 +443,7 @@ enyo.kind({
 			console.log("saveToLocalStorage: storageObject = " 				  + JSON.stringify(storageObject)  );
 			*/
 
-			localStorage.setItem(this.localStorageReference, JSON.stringify(storageObject) );
+			window.localStorage.setItem(this.localStorageReference, JSON.stringify(storageObject) );
 
 		}
 
@@ -363,7 +469,9 @@ enyo.kind({
 		if (this.localStorageAvailable)
 		{
 
-			retrievedString = localStorage.getItem(this.localStorageReference);
+			// enyo.log("retrieveFromLocalStorage:  About to perform getItem()");
+
+			retrievedString = window.localStorage.getItem(this.localStorageReference);
 			retrievedObject = JSON.parse( retrievedString );
 
 			// console.log("retrieveFromLocalStorage: A = " + retrievedObject);
@@ -400,6 +508,9 @@ enyo.kind({
 			console.log("retrieveFromLocalStorage: value = null");
 			// window.alert("retrieveFromLocalStorage: value = null");
 		}
+
+		// console.log("retrieveFromLocalStorage: about to exit");
+
 	},
 
 	// localStorage.setItem( 'car', JSON.stringify(car) );
@@ -514,6 +625,14 @@ enyo.kind({
 		}
 		this.saveToLocalStorage();
 		return true;
+	},
+	backButtonHandler: function(inSender, inEvent) {
+
+		// Two possible mods:
+		// add try/catch, and
+		// test for Android platform
+
+		navigator.app.exitApp(); 
 	}
 
 
@@ -522,7 +641,7 @@ enyo.kind({
 
 
 
-//	=========================================
+//	===========================================================
 //	End of File
 //
 
