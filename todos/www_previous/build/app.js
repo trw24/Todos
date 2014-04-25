@@ -4418,19 +4418,20 @@ this.setShowing(!1);
 
 // App.js
 
-myApp = {}, enyo.kind({
-name: "CordovaListener",
+var myApp = {}, MyCordovaListener = enyo.kind({
 components: [ {
 kind: "Signals",
 ondeviceready: "deviceReadyHandler"
 } ],
-deviceReadyHandler: function() {
-myApp = new MyApp, myApp.renderInto(document.body);
-},
 create: function() {
 this.inherited(arguments);
+},
+deviceReadyHandler: function() {
+myApp = new MyApp, myApp.renderInto(document.body);
 }
-}), enyo.kind({
+});
+
+enyo.kind({
 name: "oneActionItem",
 kind: "FittableRows",
 classes: "overall-width",
@@ -4500,30 +4501,41 @@ return this.$.userTodoDeleteMark.applyStyle("visibility", "hidden"), !0;
 }), enyo.kind({
 name: "MyApp",
 kind: "FittableRows",
-style: "background-image:url(assets/bg.png)",
+style: "background-image:url(assets/bg.png);",
 components: [ {
 kind: "Signals",
 onbackbutton: "backButtonHandler"
 }, {
 name: "titleFittableRow",
 kind: "FittableRows",
-style: "height:65px;margin:auto;width:90%;",
+style: "height:80px;margin:auto;width:90%;",
 components: [ {
 kind: "FittableColumns",
-style: "height:100%;",
+style: "height:100%;padding-top:8px;",
 components: [ {
 content: "To Dos",
 classes: "app-title",
 style: "width:65%;height:inherit;background-color:inherit;text-align:left;"
 }, {
+name: "menuDecorator",
 kind: "onyx.MenuDecorator",
 style: "width:35%;",
 components: [ {
-content: "Options",
-style: "float:right; margin-top:20px;"
+name: "menuButton",
+style: "float:right;margin-top:8px;height:50px;padding-top:4px;",
+components: [ {
+name: "gearIcon",
+kind: "onyx.Icon",
+src: "assets/gearFour_40.png",
+style: "width:40px;height:40px;opacity:0.3;"
+} ]
 }, {
+name: "realMenu",
 kind: "onyx.Menu",
 floating: !0,
+scrim: !0,
+modal: !1,
+style: "min-width:110px;float:right;",
 components: [ {
 content: "Reset",
 ontap: "resetTapped"
@@ -4537,7 +4549,7 @@ ontap: "aboutTapped"
 }, {
 kind: "FittableRows",
 classes: "overall-width",
-style: "height:15px;margin:auto;background:-webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));"
+style: "opacity:0.5;height:10px;margin:auto;background:-webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));"
 }, {
 name: "createTodoItem",
 kind: "FittableRows",
@@ -4573,7 +4585,7 @@ name: "listOfItems"
 } ]
 }, {
 kind: "FittableRows",
-style: "height:30px;"
+style: "height:10px;"
 }, {
 name: "aboutPopup",
 kind: "onyx.Popup",
@@ -4624,18 +4636,25 @@ arrayOfObjects: []
 deleteThisActionItemReference: enyo.bind(this, this.deleteActionItem)
 };
 if (this.localStorageAvailable) {
-t = window.localStorage.getItem(this.localStorageReference), n = JSON.parse(t), this.nextItemInList = 0;
-for (var i = 0; i < n.arrayOfObjects.length; i++) this.createComponent({
+try {
+t = window.localStorage.getItem(this.localStorageReference);
+} catch (i) {
+enyo.log("getItem Failed.  Message = " + i.message);
+}
+if (t != null) {
+enyo.log("retrieveFromLocalStorage: value != null"), alert("retrieveFromLocalStorage: value != null"), alert("retrievedString.lenth = " + t.length), n = JSON.parse(t), n == null && alert("R.O. == null"), n === null && alert("R.O. === null"), alert("retrieveFromLocalStorage: B = " + n.arrayOfObjects), alert("retrieveFromLocalStorage: C = " + n.arrayOfObjects.length), this.nextItemInList = 0;
+for (var s = 0; s < n.arrayOfObjects.length; s++) this.createComponent({
 name: this.itemPrefix + this.nextItemInList,
 kind: "oneActionItem",
 container: this.$.listOfItems,
-userTodoString: n.arrayOfObjects[i].text,
-userTodoCompletionStatusFlag: n.arrayOfObjects[i].completionStatusFlag,
+userTodoString: n.arrayOfObjects[s].text,
+userTodoCompletionStatusFlag: n.arrayOfObjects[s].completionStatusFlag,
 parentsThis: this,
 deleteActionItemObject: r
 }), ++this.nextItemInList;
 this.$.listOfItems.render();
-} else console.log("retrieveFromLocalStorage: value = null");
+}
+}
 },
 addItemToList: function(e, t) {
 var n = {

@@ -74,7 +74,8 @@ echo "CORDOVA:  Start"
 
 cd ${TARGET}
 
-cordova build >/dev/null 2>/dev/null
+# cordova build >/dev/null 2>/dev/null
+cordova build
 if [ "$?" -eq 0 ]
 then
 	echo "Cordova build successful"

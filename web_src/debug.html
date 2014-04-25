@@ -18,13 +18,30 @@
 		<script src="enyo/enyo.js"></script>
 		<!-- application (debug) -->
 		<script src="source/package.js" type="text/javascript"></script>
+		<script type="text/javascript">
+			var myCordovaListener = {};
+		</script>
 	</head>
 	<body class="enyo-unselectable">
 		<script type="text/javascript">
 
 
-            enyo.dispatcher.listen(document, "deviceready");
-	        new CordovaListener();
+			if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/)) {
+
+				// alert("Running App # 1");
+				myCordovaListener = new MyCordovaListener();
+
+			} else {
+
+				// alert("Running App # 2");
+				myApp = new MyApp();
+				myApp.renderInto(document.body);
+			}
+
+			// new CordovaListener();
+			// myCordovaListener = new MyCordovaListener();
+	        // myCordovaListener.renderInto(document.body);
+			// new CordovaListener();	        
 
 
 		</script>

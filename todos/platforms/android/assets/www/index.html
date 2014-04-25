@@ -18,17 +18,33 @@
 		<!-- js -->
 		<script src="build/enyo.js"></script>
 		<script src="build/app.js"></script>
-	</head>
-	<body class="enyo-unselectable">
 		<script type="text/javascript">
-			if (!window.CordovaListener) {
+			var myCordovaListener = {};
+		</script>
+	</head>
+	<body class="enyo-unselectable" >
+		<script type="text/javascript">
+			if (!window.MyCordovaListener) {
 				alert('No application build found, redirecting to debug.html.');
 				location = 'debug.html';
 			}
 
 
-            enyo.dispatcher.listen(document, "deviceready");
-	        new CordovaListener();
+			if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android)/)) {
+
+				// alert("Running App # 1");
+				myCordovaListener = new MyCordovaListener();
+
+			} else {
+
+				// alert("Running App # 2");
+				myApp = new MyApp();
+				myApp.renderInto(document.body);
+			}
+
+
+			// new CordovaListener();
+//	        myCordovaListener = new MyCordovaListener();
 
 
 		</script>

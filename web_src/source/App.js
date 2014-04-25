@@ -6,28 +6,36 @@
 //	CordovaListener.js
 //
 
-myApp = {};
+var myApp = {};
 
-enyo.kind({
-	name: "CordovaListener",
+// var MyCordovaListener = {};
+
+var MyCordovaListener = enyo.kind({
+	// name: "CordovaListener",
 	components: [
 	    {kind: "Signals", ondeviceready: "deviceReadyHandler"}
 	],
+	create: function() {
+
+		this.inherited(arguments);
+		// alert("CordovaListener: create()");
+		// enyo.log("CordovaListener: create()");
+
+		//
+		// used when not expecting "deviceready" event
+		// when run in non-cordova environment, un-comment this line
+		// this.deviceReadyHandler();
+		// 
+	},
 	deviceReadyHandler: function() {
 
+		// enyo.log("CordovaListener: deviceReadyHandler()");
+		// alert("CordovaListener: deviceReadyHandler()");
 		// navigator.notification.alert("Device is ready", null, "Cordova-Enyo", "OK");
 
 		myApp = new MyApp();
 		myApp.renderInto(document.body);
 
-	},
-	create: function() {
-
-		this.inherited(arguments);
-
-		// used when not expecting "deviceready" event
-		// when run in non-cordova environment, un-comment this line
-		this.deviceReadyHandler();		
 	}
 
 });
@@ -202,7 +210,7 @@ enyo.kind({
 enyo.kind({
 	name: "MyApp",
 	kind: "FittableRows",
-	style: "background-image:url(assets/bg.png)",
+	style: "background-image:url(assets/bg.png);",
 	components:
 	[
 	    {
@@ -215,11 +223,12 @@ enyo.kind({
 			name: "titleFittableRow",
 			kind: "FittableRows",
 			// classes: "overall-width",
-			style: "height:65px;margin:auto;width:90%;",
+			style: "height:80px;margin:auto;width:90%;",
+			// style: "height:65px;margin:auto;width:90%;",
 			components:
 			[{
 				kind: "FittableColumns",
-				style: "height:100%;",
+				style: "height:100%;padding-top:8px;",
 				components:
 				[
 					{
@@ -228,20 +237,44 @@ enyo.kind({
 						style: "width:65%;height:inherit;background-color:inherit;text-align:left;"
 					},
 
+	// For Button w/ icon
+	// {
+	// 	kind: "onyx.Button", 
+	// 	name:"Fishbowl Button", 
+	// 	// ontap:"buttonTapped", 
+	// 	components: [
+	// 				{
+	// 					kind: "onyx.Icon", 
+	// 					src: "assets/fish_bowl.png"
+	// 				}
+	// 	]
+	// }
+
 
 					{
+						name: "menuDecorator",
 						kind: "onyx.MenuDecorator",
-						// onSelect: "itemSelected",
 						style: "width:35%;",
 						components: 
 						[
 							{
-								content: "Options",
-								style: "float:right; margin-top:20px;"
+								name: "menuButton",
+								style: "float:right;margin-top:8px;height:50px;padding-top:4px;",
+								components: [{
+									name: "gearIcon",
+									kind: "onyx.Icon",
+									src: "assets/gearFour_40.png",
+									style: "width:40px;height:40px;opacity:0.3;"
+								}]
 							},
 							{
+								name: "realMenu",
+								// kind: "onyx.Popup",	// new ???
 								kind: "onyx.Menu", 
-								floating: true, 
+								floating: true,
+								scrim: true,
+								modal: false,
+								style: "min-width:110px;float:right;",
 								components: 
 								[
 
@@ -262,7 +295,7 @@ enyo.kind({
 			// Display Top Border
 			kind: "FittableRows",
 			classes: "overall-width",
-			style: "height:15px;margin:auto;background:-webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));"
+			style: "opacity:0.5;height:10px;margin:auto;background:-webkit-linear-gradient(top, rgba(132, 110, 100, 0.8), rgba(101, 84, 76, 0.8));"
 		},
 		{
 			// Input Box to Create New TodoItem
@@ -321,20 +354,6 @@ enyo.kind({
 			kind: "FittableRows",
 			style: "height:10px;"
 		},
-
-		//	=============================================
-		//	Now part of Menu button in upper right of app
-		// {
-		// 	// Display Bottom "FittableRow" with "Reset" and "About" buttons
-		// 	kind: "FittableRows",
-		// 	style: "height:32px;margin:20px;",
-		// 	// style: "height:32px;margin:20px;text-align:center;",
-		// 	components: [
-		// 		{kind: "onyx.Button", style: "margin:auto;float:left;",  content: "Reset", ontap: "resetTapped"},
-		// 		{kind: "onyx.Button", style: "margin:auto;float:right;", content: "About", ontap: "aboutTapped"}
-		// 	]
-		// },
-		//	=============================================
 		{
 			// Create the PopUp Object
 			name: "aboutPopup",
@@ -362,20 +381,24 @@ enyo.kind({
 	create: function()
 	{
 		this.inherited(arguments);
+		// enyo.log("MyApp:  create()");
+		// alert("MyApp:  create()");
 
 
 		if ( typeof(window.localStorage) == 'undefined' || window.localStorage === null)
 		{
 			// enyo.log("window.localStorage == FALSE");
+			// alert("Local Storage = false", null, "", "OK");
 			// navigator.notification.alert("Local Storage = false", null, "", "OK");
 			this.localStorageAvailable = false;
 		}
 		else
 		{
 			// enyo.log("window.localStorage == TRUE");
-			// navigator.notification.alert("Local Storage = true", null, "", "OK");
+			// alert("Local Storage = true", null, "", "OK");
 			this.localStorageAvailable = true;
 
+			//
 			// Run this line when app does not load correctly
 			// It forces saved values to be cleared
 			//
@@ -385,9 +408,6 @@ enyo.kind({
 			this.retrieveFromLocalStorage();
 		}
 
-
-		// sample code for testing browser support of local storage
-		// if('localStorage' in window && window['localStorage'] !== null){
 	},
 	//	=========================================
 	saveToLocalStorage: function()
@@ -453,6 +473,7 @@ enyo.kind({
 	{
 
 		// enyo.log("retrieveFromLocalStorage()");
+		// alert("retrieveFromLocalStorage()");
 
 		var storageObject = {
 			"arrayOfObjects": []
@@ -470,53 +491,85 @@ enyo.kind({
 		{
 
 			// enyo.log("retrieveFromLocalStorage:  About to perform getItem()");
+			// alert("retrieveFromLocalStorage:  About to perform getItem()");
 
-			retrievedString = window.localStorage.getItem(this.localStorageReference);
-			retrievedObject = JSON.parse( retrievedString );
+			try {
+				retrievedString = window.localStorage.getItem(this.localStorageReference);
+			}
+			catch (error) {
+				enyo.log("getItem Failed.  Message = " + error.message);
+				// alert(   "getItem Failed.  Message = " + error.message);
+			}
 
-			// console.log("retrieveFromLocalStorage: A = " + retrievedObject);
-			// console.log("retrieveFromLocalStorage: B = " + retrievedObject.arrayOfObjects);
-			// console.log("retrieveFromLocalStorage: C = " + retrievedObject.arrayOfObjects.length);
+			// enyo.log("After CATCH");
+			// alert(   "After CATCH");
 
-			this.nextItemInList = 0;
-			for (var i=0; i<retrievedObject.arrayOfObjects.length; i++)
+			// if (retrievedString == null)			alert("R.S. == null");
+			// if (retrievedString === null)			alert("R.S. === null");
+
+
+			if (retrievedString != null)
 			{
-				/*
-				enyo.log("CreatingComponent: " + retrievedObject.arrayOfObjects[i].text + " : " 
-					+ retrievedObject.arrayOfObjects[i].completionStatusFlag);
-				*/
 
-				this.createComponent({
+				// enyo.log("retrieveFromLocalStorage: value != null");
+				// alert(   "retrieveFromLocalStorage: value != null");
 
-					name: 					this.itemPrefix + this.nextItemInList,
-					kind: 					"oneActionItem",
-					container: 				this.$.listOfItems,
-					userTodoString: 			  retrievedObject.arrayOfObjects[i].text,
-					userTodoCompletionStatusFlag: retrievedObject.arrayOfObjects[i].completionStatusFlag,
-					parentsThis: 			this,
-					deleteActionItemObject: deleteActionItemFunctionObject
-				});
-				++this.nextItemInList;
+				// enyo.log("retrievedString.lenth = " + retrievedString.length);
+				// alert("retrievedString.lenth = " + retrievedString.length);
+
+				retrievedObject = JSON.parse( retrievedString );
+
+				if (retrievedObject == null)			enyo.log("R.O. == null");
+				if (retrievedObject === null)		enyo.log("R.O. === null");
+
+				// enyo.log("retrieveFromLocalStorage:  Completed getItem()");
+				// alert(   "retrieveFromLocalStorage:  Completed getItem()");
+
+				
+				// alert("retrieveFromLocalStorage: B = " + retrievedObject.arrayOfObjects);
+				// alert("retrieveFromLocalStorage: C = " + retrievedObject.arrayOfObjects.length);
+
+				this.nextItemInList = 0;
+				for (var i=0; i<retrievedObject.arrayOfObjects.length; i++)
+				{
+
+					/*
+					enyo.log("CreatingComponent: " + retrievedObject.arrayOfObjects[i].text + " : " 
+						+ retrievedObject.arrayOfObjects[i].completionStatusFlag);
+					*/
+
+					this.createComponent({
+
+						name: 					this.itemPrefix + this.nextItemInList,
+						kind: 					"oneActionItem",
+						container: 				this.$.listOfItems,
+						userTodoString: 			  retrievedObject.arrayOfObjects[i].text,
+						userTodoCompletionStatusFlag: retrievedObject.arrayOfObjects[i].completionStatusFlag,
+						parentsThis: 			this,
+						deleteActionItemObject: deleteActionItemFunctionObject
+					});
+					++this.nextItemInList;
+
+				}
+			
+				this.$.listOfItems.render();
 
 			}
-		
-			this.$.listOfItems.render();
+			// else
+			// {
+			// 	enyo.log("retrieveFromLocalStorage: value == null");
+			// 	alert(   "retrieveFromLocalStorage: value == null");
+			// }
 
 		}
-		else
-		{
-			console.log("retrieveFromLocalStorage: value = null");
-			// window.alert("retrieveFromLocalStorage: value = null");
-		}
-
-		// console.log("retrieveFromLocalStorage: about to exit");
+		// else
+		// {
+		// 	enyo.log("localStorage not available");
+		// 	alert(   "localStorage not available");
+		// }
 
 	},
 
-	// localStorage.setItem( 'car', JSON.stringify(car) );
-	// console.log( JSON.parse( localStorage.getItem( 'car' ) ) );
-	// JSON.stringify() and JSON.parse() (or eval() )
-	// localStorage["name"] = username
 
 	//	=========================================
 
@@ -628,9 +681,8 @@ enyo.kind({
 	},
 	backButtonHandler: function(inSender, inEvent) {
 
-		// Two possible mods:
-		// add try/catch, and
-		// test for Android platform
+		// Needed for Android platform.
+		// On iOS it has no effect.
 
 		navigator.app.exitApp(); 
 	}

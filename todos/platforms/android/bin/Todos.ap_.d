@@ -24,6 +24,14 @@
 /Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/res \
 /Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/bg.png \
 /Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/favicon.ico \
+/Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/gearFour.png \
+/Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/gearFour_20.png \
+/Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/gearFour_30.png \
+/Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/gearFour_40.png \
+/Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/gearFour_50.png \
+/Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/gearOne.jpeg \
+/Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/gearThree.png \
+/Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/assets/gearTwo.jpeg \
 /Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/build/app.css \
 /Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/build/app.js \
 /Users/troy/Documents/troywork/Edutraining/enyoAndCordova/Todos/todos/platforms/android/assets/www/build/enyo.css \
