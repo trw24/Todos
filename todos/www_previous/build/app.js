@@ -4642,7 +4642,7 @@ t = window.localStorage.getItem(this.localStorageReference);
 enyo.log("getItem Failed.  Message = " + i.message);
 }
 if (t != null) {
-enyo.log("retrieveFromLocalStorage: value != null"), alert("retrieveFromLocalStorage: value != null"), alert("retrievedString.lenth = " + t.length), n = JSON.parse(t), n == null && alert("R.O. == null"), n === null && alert("R.O. === null"), alert("retrieveFromLocalStorage: B = " + n.arrayOfObjects), alert("retrieveFromLocalStorage: C = " + n.arrayOfObjects.length), this.nextItemInList = 0;
+n = JSON.parse(t), n == null && enyo.log("R.O. == null"), n === null && enyo.log("R.O. === null"), this.nextItemInList = 0;
 for (var s = 0; s < n.arrayOfObjects.length; s++) this.createComponent({
 name: this.itemPrefix + this.nextItemInList,
 kind: "oneActionItem",
