@@ -4517,32 +4517,15 @@ content: "To Dos",
 classes: "app-title",
 style: "width:65%;height:inherit;background-color:inherit;text-align:left;"
 }, {
-name: "menuDecorator",
-kind: "onyx.MenuDecorator",
-style: "width:35%;",
-components: [ {
-name: "menuButton",
+name: "gearButton",
+kind: "onyx.Button",
 style: "float:right;margin-top:8px;height:50px;padding-top:4px;",
+ontap: "gearButtonHandler",
 components: [ {
 name: "gearIcon",
 kind: "onyx.Icon",
 src: "assets/gearFour_40.png",
 style: "width:40px;height:40px;opacity:0.3;"
-} ]
-}, {
-name: "realMenu",
-kind: "onyx.Menu",
-floating: !0,
-scrim: !0,
-modal: !1,
-style: "min-width:110px;float:right;",
-components: [ {
-content: "Reset",
-ontap: "resetTapped"
-}, {
-content: "About",
-ontap: "aboutTapped"
-} ]
 } ]
 } ]
 } ]
@@ -4562,8 +4545,8 @@ components: [ {
 content: "",
 style: "width:50px;height:inherit;background-color:inherit;text-align:center;"
 }, {
-kind: "onyx.Input",
 name: "userInput",
+kind: "onyx.Input",
 placeholder: "Enter Task",
 content: "",
 fit: !0,
@@ -4587,9 +4570,30 @@ name: "listOfItems"
 kind: "FittableRows",
 style: "height:10px;"
 }, {
-name: "aboutPopup",
+name: "menuPopup",
 kind: "onyx.Popup",
 autoDismiss: !0,
+modal: !1,
+scrim: !0,
+centered: !0,
+ontap: "menuHide",
+components: [ {
+content: "Reset",
+style: "font-size:20px;padding:15px;text-align:center;",
+ontap: "resetTapped"
+}, {
+content: "About",
+style: "font-size:20px;padding:15px;text-align:center;",
+ontap: "aboutTapped"
+}, {
+content: "Dismiss",
+style: "font-size:20px;padding:15px;text-align:center;",
+ontap: "dismissTapped"
+} ]
+}, {
+name: "aboutPopup",
+kind: "onyx.Popup",
+autoDismiss: !1,
 modal: !1,
 scrim: !0,
 centered: !0,
@@ -4685,20 +4689,37 @@ for (var n = 0; n < t.length; n++) t[n].getName() == e && t[n].destroy();
 return this.saveToLocalStorage(), !0;
 },
 aboutTapped: function(e, t) {
+enyo.log("aboutTapped");
 var n = "";
-n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy", this.$.popupContent.setContent(n), this.$.aboutPopup.show();
+return n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy", this.$.menuPopup.hide(), this.$.popupContent.setContent(n), this.$.aboutPopup.show(), enyo.log("aboutTapped: before exit"), !0;
 },
 aboutHide: function(e, t) {
-this.$.aboutPopup.hide();
+return enyo.log("aboutHide: before setTimeout"), setTimeout(function() {
+enyo.log("Inside function"), this.$.aboutPopup.hide();
+}.bind(this), 300), enyo.log("aboutHide: before exit"), !0;
 },
 resetTapped: function(e, t) {
+enyo.log("resetTapped");
 if (this.$.listOfItems.controls.length > 0) {
 var n = this.getComponents(), r = this.itemPrefix.length;
 for (var i = 0; i < n.length; i++) n[i].getName().substring(0, r) == this.itemPrefix && n[i].destroy();
 }
-return this.saveToLocalStorage(), !0;
+return this.saveToLocalStorage(), enyo.log("resetTapped: before setTimeout"), setTimeout(function() {
+enyo.log("Inside function"), this.$.menuPopup.hide();
+}.bind(this), 300), enyo.log("resetTapped: before exit"), !0;
+},
+dismissTapped: function(e, t) {
+return enyo.log("dismissTapped: before setTimeout"), setTimeout(function() {
+enyo.log("Inside function"), this.$.menuPopup.hide();
+}.bind(this), 300), enyo.log("dismissTapped: before exit"), !0;
 },
 backButtonHandler: function(e, t) {
 navigator.app.exitApp();
+},
+menuButtonHandler: function(e, t) {
+return !0;
+},
+gearButtonHandler: function(e, t) {
+return this.$.menuPopup.show(), !0;
 }
 });

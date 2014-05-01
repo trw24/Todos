@@ -690,7 +690,7 @@ enyo.kind({
 		// this.$.userInput.setDisabled(false);
 		// this.$.aboutPopup.hide();
 
-		setTimeout( function() { enyo.log("Inside function"); this.$.aboutPopup.hide(); }.bind(this) , 400);
+		setTimeout( function() { enyo.log("Inside function"); this.$.aboutPopup.hide(); }.bind(this) , 1000);
 
 		// this.$.aboutPopup.hide();
 
@@ -730,7 +730,7 @@ enyo.kind({
 		enyo.log("resetTapped: before setTimeout");
 
 		// this.$.menuPopup.hide();
-		setTimeout( function() { enyo.log("Inside function"); this.$.menuPopup.hide(); }.bind(this) , 400);
+		setTimeout( function() { enyo.log("Inside function"); this.$.menuPopup.hide(); }.bind(this) , 1000);
 
 		// setTimeout(function(){ this.$.menuPopup.hide(); },2000);
 
@@ -742,12 +742,7 @@ enyo.kind({
 
 		enyo.log("dismissTapped: before setTimeout");
 
-		setTimeout( function() {  enyo.log("Inside function"); this.$.menuPopup.hide(); }.bind(this) , 400);
-
-		// 200 -> does not work
-		// 300 -> does NOT work
-		// 400 -> does work
-
+		setTimeout( function() {  enyo.log("Inside function"); this.$.menuPopup.hide(); }.bind(this) , 1000);
 
 		// var myFunction = enyo.bind(this, function(){ enyo.log("inside bound function"); /* this.$.menuPopup.hide(); */ } );
 		// setTimeout(myFunction(), 2000);
