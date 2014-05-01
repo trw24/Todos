@@ -4519,7 +4519,7 @@ style: "width:65%;height:inherit;background-color:inherit;text-align:left;"
 }, {
 name: "gearButton",
 kind: "onyx.Button",
-style: "float:right;margin-top:8px;height:50px;padding-top:4px;",
+style: "float:right;margin-top:8px !important;height:50px;padding-top:4px;",
 ontap: "gearButtonHandler",
 components: [ {
 name: "gearIcon",

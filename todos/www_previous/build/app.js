@@ -4576,7 +4576,8 @@ autoDismiss: !1,
 modal: !1,
 scrim: !0,
 centered: !0,
-ontap: "menuHide",
+floating: !0,
+ontap: "dismissTapped",
 components: [ {
 content: "Reset",
 style: "font-size:20px;padding:15px;text-align:center;",
@@ -4597,7 +4598,8 @@ autoDismiss: !1,
 modal: !1,
 scrim: !0,
 centered: !0,
-ontap: "aboutHide",
+floating: !0,
+ontap: "aboutPopupHide",
 components: [ {
 name: "popupContent",
 kind: "FittableRows",
@@ -4693,7 +4695,7 @@ enyo.log("aboutTapped");
 var n = "";
 return n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy", this.$.menuPopup.hide(), this.$.popupContent.setContent(n), this.$.aboutPopup.show(), enyo.log("aboutTapped: before exit"), !0;
 },
-aboutHide: function(e, t) {
+aboutPopupHide: function(e, t) {
 return enyo.log("aboutHide: before setTimeout"), this.$.aboutPopup.hide(), setTimeout(function() {
 enyo.log("Inside function"), this.$.userInput.setDisabled(!1);
 }.bind(this), 400), enyo.log("aboutHide: before exit"), !0;
