@@ -4572,11 +4572,12 @@ style: "height:10px;"
 }, {
 name: "menuPopup",
 kind: "onyx.Popup",
-autoDismiss: !0,
+autoDismiss: !1,
 modal: !1,
 scrim: !0,
 centered: !0,
-ontap: "menuHide",
+floating: !0,
+ontap: "dismissTapped",
 components: [ {
 content: "Reset",
 style: "font-size:20px;padding:15px;text-align:center;",
@@ -4597,7 +4598,8 @@ autoDismiss: !1,
 modal: !1,
 scrim: !0,
 centered: !0,
-ontap: "aboutHide",
+floating: !0,
+ontap: "aboutPopupHide",
 components: [ {
 name: "popupContent",
 kind: "FittableRows",
@@ -4693,9 +4695,9 @@ enyo.log("aboutTapped");
 var n = "";
 return n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy", this.$.menuPopup.hide(), this.$.popupContent.setContent(n), this.$.aboutPopup.show(), enyo.log("aboutTapped: before exit"), !0;
 },
-aboutHide: function(e, t) {
-return enyo.log("aboutHide: before setTimeout"), setTimeout(function() {
-enyo.log("Inside function"), this.$.aboutPopup.hide();
+aboutPopupHide: function(e, t) {
+return enyo.log("aboutHide: before setTimeout"), this.$.aboutPopup.hide(), setTimeout(function() {
+enyo.log("Inside function"), this.$.userInput.setDisabled(!1);
 }.bind(this), 400), enyo.log("aboutHide: before exit"), !0;
 },
 resetTapped: function(e, t) {
@@ -4704,13 +4706,13 @@ if (this.$.listOfItems.controls.length > 0) {
 var n = this.getComponents(), r = this.itemPrefix.length;
 for (var i = 0; i < n.length; i++) n[i].getName().substring(0, r) == this.itemPrefix && n[i].destroy();
 }
-return this.saveToLocalStorage(), enyo.log("resetTapped: before setTimeout"), setTimeout(function() {
-enyo.log("Inside function"), this.$.menuPopup.hide();
+return this.saveToLocalStorage(), enyo.log("resetTapped: before setTimeout"), this.$.menuPopup.hide(), setTimeout(function() {
+enyo.log("Inside function"), this.$.userInput.setDisabled(!1);
 }.bind(this), 400), enyo.log("resetTapped: before exit"), !0;
 },
 dismissTapped: function(e, t) {
-return enyo.log("dismissTapped: before setTimeout"), setTimeout(function() {
-enyo.log("Inside function"), this.$.menuPopup.hide();
+return enyo.log("dismissTapped: before setTimeout"), this.$.menuPopup.hide(), setTimeout(function() {
+enyo.log("Inside function"), this.$.userInput.setDisabled(!1);
 }.bind(this), 400), enyo.log("dismissTapped: before exit"), !0;
 },
 backButtonHandler: function(e, t) {
@@ -4720,6 +4722,6 @@ menuButtonHandler: function(e, t) {
 return !0;
 },
 gearButtonHandler: function(e, t) {
-return this.$.menuPopup.show(), !0;
+return this.$.menuPopup.show(), this.$.userInput.setDisabled(!0), !0;
 }
 });

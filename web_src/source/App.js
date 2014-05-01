@@ -353,11 +353,12 @@ enyo.kind({
 			// Create the Gear (menu) PopUp Object
 			name: "menuPopup",
 			kind: "onyx.Popup",
-		    autoDismiss: true,
+		    autoDismiss: false,
 		    modal: false,
 		    scrim: true,
 		    centered: true,
-		    ontap: "menuHide",
+		    floating: true,
+		    ontap: "dismissTapped",
 			components: 
 			[
 				{content: "Reset",   style: "font-size:20px;padding:15px;text-align:center;", ontap: "resetTapped"},
@@ -373,7 +374,9 @@ enyo.kind({
 		    modal: false,
 		    scrim: true,
 		    centered: true,
-		    ontap: "aboutHide",
+		    floating: true,
+		    ontap: "aboutPopupHide",
+		    // onHide: "aboutPopupHide",
 			components: 
 			[{
 				name: "popupContent",
@@ -683,14 +686,24 @@ enyo.kind({
 		enyo.log("aboutTapped: before exit");
 		return true;
 	},
-	aboutHide: function(inSender, inEvent) {
+	// aboutPopupTapped: function(inSender, inEvent) {
+	// 	enyo.log("aboutPopupTapped");
+	// 	this.aboutPopupHide();
+	// },
+	aboutPopupHide: function(inSender, inEvent) {
 
 		enyo.log("aboutHide: before setTimeout");
 		// enyo.log("Input: Enable");
 		// this.$.userInput.setDisabled(false);
 		// this.$.aboutPopup.hide();
 
-		setTimeout( function() { enyo.log("Inside function"); this.$.aboutPopup.hide(); }.bind(this) , 400);
+		// This line works fine:
+		// setTimeout( function() { enyo.log("Inside function"); this.$.aboutPopup.hide(); }.bind(this) , 400);
+
+
+		this.$.aboutPopup.hide();
+		setTimeout( function() {  enyo.log("Inside function"); this.$.userInput.setDisabled(false); }.bind(this) , 400);
+
 
 		// this.$.aboutPopup.hide();
 
@@ -730,7 +743,11 @@ enyo.kind({
 		enyo.log("resetTapped: before setTimeout");
 
 		// this.$.menuPopup.hide();
-		setTimeout( function() { enyo.log("Inside function"); this.$.menuPopup.hide(); }.bind(this) , 400);
+		// this line works fine:
+		// setTimeout( function() { enyo.log("Inside function"); this.$.menuPopup.hide(); }.bind(this) , 400);
+
+		this.$.menuPopup.hide();
+		setTimeout( function() {  enyo.log("Inside function"); this.$.userInput.setDisabled(false); }.bind(this) , 400);
 
 		// setTimeout(function(){ this.$.menuPopup.hide(); },2000);
 
@@ -742,11 +759,26 @@ enyo.kind({
 
 		enyo.log("dismissTapped: before setTimeout");
 
-		setTimeout( function() {  enyo.log("Inside function"); this.$.menuPopup.hide(); }.bind(this) , 400);
+		//
+		// This line works fine when set to 400 ms
+		// setTimeout( function() {  enyo.log("Inside function"); this.$.menuPopup.hide(); }.bind(this) , 400);
+		//
 
+		// Now, when delaying the "hide", the following numbers work.
 		// 200 -> does not work
 		// 300 -> does NOT work
 		// 400 -> does work
+
+
+		// Now, testing for case when re-activating the input field after the touch:
+
+		// with 400 -> it works fine
+		// with 200 -> does NOT work
+		// with 100 -> does NOT work
+
+
+		this.$.menuPopup.hide();
+		setTimeout( function() {  enyo.log("Inside function"); this.$.userInput.setDisabled(false); }.bind(this) , 400);
 
 
 		// var myFunction = enyo.bind(this, function(){ enyo.log("inside bound function"); /* this.$.menuPopup.hide(); */ } );
@@ -774,6 +806,7 @@ enyo.kind({
 	gearButtonHandler: function(inSender, inEvent) {
 
 		this.$.menuPopup.show();
+		this.$.userInput.setDisabled(true);
 
 		// this.startJob("clearSecond", function() { this.$.menuPopup.hide(); }, 2000);
 		// this.startJob("clearSecond", function() { this.$.secondPopup.hide(); }, 2000);
