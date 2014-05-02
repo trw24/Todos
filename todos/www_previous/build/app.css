@@ -1427,15 +1427,14 @@
 	Put anything you reference with "url(../source)" in ../assets/
 	This way, you can minify your application, and just remove the "source" folder for production
 */
+
 .nice-padding {
 	padding: 15px;
 }
 
-
 .overall-width {
 	width: 90%;
 }
-
 
 .task-format {
 	font-size: 24px;
@@ -1443,17 +1442,14 @@
 	opacity: 1.0;
 }
 
-
 .task-now-complete {
 	text-decoration: line-through;
 	opacity: 0.4;
 }
 
-
 .checkmark-now-complete {
 	opacity: 0.4;
 }
-
 
 .app-title {
 
@@ -1465,7 +1461,6 @@
 	margin-top:20px;
 	margin-bottom:20px;
 }
-
 
 .popup-style {
 

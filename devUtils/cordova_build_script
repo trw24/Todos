@@ -71,7 +71,8 @@ cordova plugin ls
 
 
 # Do final build.  Check for any errors.
-cordova build >/dev/null 2>/dev/null
+# cordova build >/dev/null 2>/dev/null
+cordova build
 if [ "$?" -eq 0 ]
 then
 	echo "Final build successful"

@@ -4508,7 +4508,8 @@ onbackbutton: "backButtonHandler"
 }, {
 name: "titleFittableRow",
 kind: "FittableRows",
-style: "height:80px;margin:auto;width:90%;",
+classes: "overall-width",
+style: "height:80px;margin:auto;",
 components: [ {
 kind: "FittableColumns",
 style: "height:100%;padding-top:8px;",
@@ -4572,11 +4573,11 @@ style: "height:10px;"
 }, {
 name: "menuPopup",
 kind: "onyx.Popup",
-autoDismiss: !1,
-modal: !1,
 scrim: !0,
+modal: !1,
 centered: !0,
 floating: !0,
+autoDismiss: !1,
 ontap: "dismissTapped",
 components: [ {
 content: "Reset",
@@ -4594,11 +4595,11 @@ ontap: "dismissTapped"
 }, {
 name: "aboutPopup",
 kind: "onyx.Popup",
-autoDismiss: !1,
-modal: !1,
 scrim: !0,
+modal: !1,
 centered: !0,
 floating: !0,
+autoDismiss: !1,
 ontap: "aboutPopupHide",
 components: [ {
 name: "popupContent",
@@ -4648,7 +4649,7 @@ t = window.localStorage.getItem(this.localStorageReference);
 enyo.log("getItem Failed.  Message = " + i.message);
 }
 if (t != null) {
-n = JSON.parse(t), n == null && enyo.log("R.O. == null"), n === null && enyo.log("R.O. === null"), this.nextItemInList = 0;
+n = JSON.parse(t), this.nextItemInList = 0;
 for (var s = 0; s < n.arrayOfObjects.length; s++) this.createComponent({
 name: this.itemPrefix + this.nextItemInList,
 kind: "oneActionItem",
@@ -4691,37 +4692,35 @@ for (var n = 0; n < t.length; n++) t[n].getName() == e && t[n].destroy();
 return this.saveToLocalStorage(), !0;
 },
 aboutTapped: function(e, t) {
-enyo.log("aboutTapped");
 var n = "";
-return n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy", this.$.menuPopup.hide(), this.$.popupContent.setContent(n), this.$.aboutPopup.show(), enyo.log("aboutTapped: before exit"), !0;
+return n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy", this.$.menuPopup.hide(), this.$.popupContent.setContent(n), this.$.aboutPopup.show(), !0;
 },
 aboutPopupHide: function(e, t) {
-return enyo.log("aboutHide: before setTimeout"), this.$.aboutPopup.hide(), setTimeout(function() {
-enyo.log("Inside function"), this.$.userInput.setDisabled(!1);
-}.bind(this), 400), enyo.log("aboutHide: before exit"), !0;
+return this.$.aboutPopup.hide(), setTimeout(function() {
+this.$.userInput.setDisabled(!1);
+}.bind(this), 400), !0;
 },
 resetTapped: function(e, t) {
-enyo.log("resetTapped");
 if (this.$.listOfItems.controls.length > 0) {
 var n = this.getComponents(), r = this.itemPrefix.length;
 for (var i = 0; i < n.length; i++) n[i].getName().substring(0, r) == this.itemPrefix && n[i].destroy();
 }
-return this.saveToLocalStorage(), enyo.log("resetTapped: before setTimeout"), this.$.menuPopup.hide(), setTimeout(function() {
-enyo.log("Inside function"), this.$.userInput.setDisabled(!1);
-}.bind(this), 400), enyo.log("resetTapped: before exit"), !0;
+return this.saveToLocalStorage(), this.$.menuPopup.hide(), setTimeout(function() {
+this.$.userInput.setDisabled(!1);
+}.bind(this), 400), !0;
 },
 dismissTapped: function(e, t) {
-return enyo.log("dismissTapped: before setTimeout"), this.$.menuPopup.hide(), setTimeout(function() {
-enyo.log("Inside function"), this.$.userInput.setDisabled(!1);
-}.bind(this), 400), enyo.log("dismissTapped: before exit"), !0;
-},
-backButtonHandler: function(e, t) {
-navigator.app.exitApp();
+return this.$.menuPopup.hide(), setTimeout(function() {
+this.$.userInput.setDisabled(!1);
+}.bind(this), 400), !0;
 },
 menuButtonHandler: function(e, t) {
 return !0;
 },
 gearButtonHandler: function(e, t) {
 return this.$.menuPopup.show(), this.$.userInput.setDisabled(!0), !0;
+},
+backButtonHandler: function(e, t) {
+navigator.app.exitApp();
 }
 });
