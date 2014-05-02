@@ -6,6 +6,7 @@ Small task app using EnyoJS and Cordova for iOS and Android.
 App features include:
 
 -> Data will persist after app has been closed.
+
 -> App supports rotation in all 4 x Orientations.
 
 ------------------
