@@ -4693,7 +4693,7 @@ return this.saveToLocalStorage(), !0;
 },
 aboutTapped: function(e, t) {
 var n = "";
-return n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy", this.$.menuPopup.hide(), this.$.popupContent.setContent(n), this.$.aboutPopup.show(), !0;
+return n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy<br />", n += "Copyright 2014 by Troy", this.$.menuPopup.hide(), this.$.popupContent.setContent(n), this.$.aboutPopup.show(), !0;
 },
 aboutPopupHide: function(e, t) {
 return this.$.aboutPopup.hide(), setTimeout(function() {

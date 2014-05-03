@@ -1,6 +1,8 @@
 //
 //	Troy's scaled down version of TodoMVC
 //
+//	Copyright 2014 by Troy Weidman
+//
 //	==================================================================================
 //
 //	MyCordovaListener.js
@@ -46,7 +48,7 @@ enyo.kind({
 	},
 	handlers: {
 		// Disable Handlers since "hover" is not supported 
-		// on a physical device (only works in browsers)
+		// on a mobile devices (only works in PC/Mac browsers)
 		// onmouseover: "onMouseOver",
 		// onmouseout: "onMouseOut",
 	},
@@ -234,7 +236,7 @@ enyo.kind({
 			}]
 		},
 		{
-			//	===================================	
+			//	Scrollable Area of dynamically added items
 			kind: "enyo.Scroller",
 			fit: true,
 			horizontal: "hidden", 
@@ -253,7 +255,6 @@ enyo.kind({
 					]
 				}
 			]
-			//	===================================	
 		},
 		{
 			// Bottom "spacer" so not up-against button of view
@@ -296,8 +297,8 @@ enyo.kind({
 			}]
 		}
 	],
-	//	========================
-	//	========================
+	//	=========================================
+	//	=========================================
 	nextItemInList: 0,
 	itemPrefix: "actionItem_",
 	localStorageAvailable: true,
@@ -418,21 +419,18 @@ enyo.kind({
 				}
 			
 				this.$.listOfItems.render();
-
 			}
 			// else
 			// {
 			// 	enyo.log("retrieveFromLocalStorage: value == null");
 			// 	alert(   "retrieveFromLocalStorage: value == null");
 			// }
-
 		}
 		// else
 		// {
 		// 	enyo.log("localStorage not available");
 		// 	alert(   "localStorage not available");
 		// }
-
 	},
 	//	=========================================
 	addItemToList: function(inSender, inEvent) {
@@ -459,7 +457,6 @@ enyo.kind({
 		this.$.userInput.setValue("");	// clear input
 
 		this.saveToLocalStorage();
-
 	},
 	removeItemFromList: function(localInput) {
 
@@ -514,7 +511,8 @@ enyo.kind({
 		popupContentString += "This app loosely based on TodoMVC<br />";
 		popupContentString += "Javascript Framework is Enyo<br />";
 		popupContentString += "Platform Support by Cordova<br />";
-		popupContentString += "Programmed by Troy";
+		popupContentString += "Programmed by Troy<br />";
+		popupContentString += "Copyright 2014 by Troy";
 
 		this.$.menuPopup.hide();
 		this.$.popupContent.setContent(popupContentString);
@@ -536,7 +534,9 @@ enyo.kind({
 		//
 		// When this program is run without any delay, a tap (or touch) to dismiss any of the popups
 		// would always cause the input field to becoem active if touch event was over the input field.
+		//
 		// This would bring up the keyboard when it is not requested.
+		//
 		// By temporarily deactivating the input field and restoring it after the popups are gone, the 
 		// problem goes away.
 		// 

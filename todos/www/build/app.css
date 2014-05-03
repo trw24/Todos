@@ -1424,8 +1424,9 @@
 /* source/App.css */
 
 /*
-	Put anything you reference with "url(../source)" in ../assets/
-	This way, you can minify your application, and just remove the "source" folder for production
+//
+//	Copyright 2014 by Troy Weidman
+//
 */
 
 .nice-padding {

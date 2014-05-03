@@ -4693,15 +4693,14 @@ return this.saveToLocalStorage(), !0;
 },
 aboutTapped: function(e, t) {
 var n = "";
-return n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy", this.$.menuPopup.hide(), this.$.popupContent.setContent(n), this.$.aboutPopup.show(), !0;
+return n += "This app loosely based on TodoMVC<br />", n += "Javascript Framework is Enyo<br />", n += "Platform Support by Cordova<br />", n += "Programmed by Troy", n += "Copyright 2014 by Troy W.", this.$.menuPopup.hide(), this.$.popupContent.setContent(n), this.$.aboutPopup.show(), !0;
 },
 aboutPopupHide: function(e, t) {
-return enyo.log("aboutHide: before setTimeout"), this.$.aboutPopup.hide(), setTimeout(function() {
+return this.$.aboutPopup.hide(), setTimeout(function() {
 this.$.userInput.setDisabled(!1);
 }.bind(this), 400), !0;
 },
 resetTapped: function(e, t) {
-enyo.log("resetTapped");
 if (this.$.listOfItems.controls.length > 0) {
 var n = this.getComponents(), r = this.itemPrefix.length;
 for (var i = 0; i < n.length; i++) n[i].getName().substring(0, r) == this.itemPrefix && n[i].destroy();

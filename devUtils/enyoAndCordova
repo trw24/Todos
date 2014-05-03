@@ -1,5 +1,9 @@
 #!/bin/sh 
 
+##
+##	Copyright 2014 by Troy Weidman
+##
+
 # Set directory and project name
 TARGET="todos"
 CAPITALIZED_TARGET="Todos"
