@@ -440,12 +440,15 @@ enyo.kind({
 			deleteThisActionItemReference: enyo.bind(this, this.deleteActionItem)
 		};
 
+		var userInputString = this.$.userInput.getValue();	// acquire user input
+		this.$.userInput.setValue("");						// clear input field
+
 		this.createComponent({
 
 			name: this.itemPrefix + this.nextItemInList,
 			kind: "oneActionItem",
 			container: this.$.listOfItems,
-			userTodoString: this.$.userInput.getValue(),
+			userTodoString: userInputString,
 			userTodoCompletionStatusFlag: false,	// set default (start) value
 			parentsThis: this,
 			deleteActionItemObject: deleteActionItemFunctionObject
@@ -453,9 +456,6 @@ enyo.kind({
 
 		++this.nextItemInList;
 		this.$.listOfItems.render();
-
-		this.$.userInput.setValue("");	// clear input
-
 		this.saveToLocalStorage();
 	},
 	removeItemFromList: function(localInput) {

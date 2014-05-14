@@ -4666,16 +4666,16 @@ this.$.listOfItems.render();
 addItemToList: function(e, t) {
 var n = {
 deleteThisActionItemReference: enyo.bind(this, this.deleteActionItem)
-};
-this.createComponent({
+}, r = this.$.userInput.getValue();
+this.$.userInput.setValue(""), this.createComponent({
 name: this.itemPrefix + this.nextItemInList,
 kind: "oneActionItem",
 container: this.$.listOfItems,
-userTodoString: this.$.userInput.getValue(),
+userTodoString: r,
 userTodoCompletionStatusFlag: !1,
 parentsThis: this,
 deleteActionItemObject: n
-}), ++this.nextItemInList, this.$.listOfItems.render(), this.$.userInput.setValue(""), this.saveToLocalStorage();
+}), ++this.nextItemInList, this.$.listOfItems.render(), this.saveToLocalStorage();
 },
 removeItemFromList: function(e) {
 if (this.$.listOfItems.controls.length > 0) {
